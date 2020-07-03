@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-
+import androidx.navigation.fragment.navArgs
 
 
 class ConfirmationFragment : Fragment() {
@@ -15,10 +15,13 @@ class ConfirmationFragment : Fragment() {
     lateinit var recipient: String
     lateinit var money: Money
 
+    private val args:ConfirmationFragmentArgs by navArgs()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        recipient = arguments!!.getString("recipient")
-        money = arguments!!.getParcelable("amount")
+        recipient = args.recipient
+        money = args.amount
 
     }
 
@@ -32,10 +35,9 @@ class ConfirmationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val amount = money!!.amount
+        val amount = money.amount
         val confirmationMessage = "You have sent $amount to $recipient"
         view.findViewById<TextView>(R.id.confirmation_message).text = confirmationMessage
     }
-
 
 }

@@ -9,22 +9,23 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import kotlinx.android.synthetic.main.fragment_choose_recipient.*
+import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_specify_amount.*
 import java.math.BigDecimal
 
 
 class SpecifyAmountFragment : Fragment(), View.OnClickListener {
 
-    lateinit var navController: NavController
-    lateinit var recipient: String
+    private lateinit var navController: NavController
+    private lateinit var recipient: String
+
+    private val args: SpecifyAmountFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        recipient = arguments!!.getString("recipient")
+        recipient = args.recipient
 
 
     }
@@ -46,21 +47,18 @@ class SpecifyAmountFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        when(v!!.id){
+        when (v!!.id) {
             R.id.send_btn -> {
-                if(!TextUtils.isEmpty(input_amount.text.toString())){
+                if (!TextUtils.isEmpty(input_amount.text.toString())) {
 
                     val amount = Money(BigDecimal(input_amount.text.toString()))
-                    val bundle = bundleOf(
-                        "recipient" to recipient,
-                        "amount" to amount
+                    navController.navigate(
+                        SpecifyAmountFragmentDirections.actionSpecifyAmountFragmentToConfirmationFragment(
+                            recipient,
+                            amount
+                        )
                     )
-                    navController!!.navigate(
-                        R.id.action_specifyAmountFragment_to_confirmationFragment,
-                        bundle
-                    )
-                }
-                else{
+                } else {
                     Toast.makeText(activity, "Enter an amount", Toast.LENGTH_SHORT).show()
                 }
             }
